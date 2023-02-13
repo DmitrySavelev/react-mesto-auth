@@ -1,0 +1,16 @@
+.elements__card {
+  list-style-type: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 20px 17px;
+  margin: 0;
+  padding: 0;
+}
+
+@media (max-width: 1279px) {
+  .elements__card {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(6, 1fr);
+  }
+}

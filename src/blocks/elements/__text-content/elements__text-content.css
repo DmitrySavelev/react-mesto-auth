@@ -1,0 +1,11 @@
+.elements__text-content {
+  display: flex;
+  width: 282px;
+  background-color: #fff;
+  align-items: center;
+  padding: 25px 20px;
+  box-sizing: border-box;
+  justify-content: space-between;
+  border-radius: 0px 0px 10px 10px;
+  gap: 32px;
+}

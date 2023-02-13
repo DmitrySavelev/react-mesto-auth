@@ -1,0 +1,11 @@
+.header {
+  width: 880px;
+  margin: 0 auto;
+  border-bottom: 1px solid #3B3B3B;
+}
+
+@media (max-width: 1279px) {
+  .header {
+    width: 320px;
+  }
+}

@@ -1,0 +1,8 @@
+.popup__input-error_visible {
+  display: block;
+  color: #FF0000;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 15px;
+  text-align: left;
+}

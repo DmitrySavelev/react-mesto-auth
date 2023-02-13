@@ -1,0 +1,14 @@
+.profile__paragraph-btn {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 18px;
+}
+
+@media (max-width: 1279px) {
+  .profile__paragraph-btn {
+    margin-left: 27px;
+    margin-top: 26px;
+    gap: 10px;
+  }
+}
