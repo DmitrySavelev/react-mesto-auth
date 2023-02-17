@@ -67,3 +67,26 @@
 @import url(./blocks/popup/_avatar/popup_avatar.css);
 @import url(./blocks/popup/__container-avatar/popup__container-avatar.css);
 @import url(./blocks/popup/__title-avatar/popup__title-avatar.css);
+
+/* popup success*/
+@import url(./blocks/popup/_success/popup_success.css);
+@import url(./blocks/popup/__container-success/popup__container-success.css);
+@import url(./blocks/popup/__title-success/popup__title-success.css);
+@import url(./blocks/popup/__success/popup__success.css);
+
+/* popup fail*/
+@import url(./blocks/popup/_fail/popup_fail.css);
+@import url(./blocks/popup/__container-fail/popup__container-fail.css);
+@import url(./blocks/popup/__title-fail/popup__title-fail.css);
+@import url(./blocks/popup/__fail/popup__fail.css);
+
+/* auth */
+@import url(./blocks/auth/auth.css);
+@import url(./blocks/auth/__form/auth__form.css);
+@import url(./blocks/auth/__title/auth__title.css);
+@import url(./blocks/auth/__input/auth__input.css);
+@import url(./blocks/auth/__input/_email/auth__input_email.css);
+@import url(./blocks/auth/__input/_password/auth__input_password.css);
+@import url(./blocks/auth/__button/auth__button.css);
+@import url(./blocks/auth/__subtitle/auth__subtitle.css);
+@import url(./blocks/auth/__link/auth__link.css);

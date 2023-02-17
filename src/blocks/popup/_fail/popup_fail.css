@@ -1,0 +1,5 @@
+.popup__fail {
+  height: 120px;
+  width: 120px;
+  background-image: url(../../../images/fail.png);
+}
