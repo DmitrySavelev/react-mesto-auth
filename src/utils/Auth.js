@@ -4,15 +4,25 @@ const handleResponse = (res) => {
   return res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`);
 };
 
-export const register = (data) => {
+export const register = (email, password) => {
+  console.log(email);
+
   return fetch(`${BASE_URL}/signup`, {
     method: "POST",
     headers: {
+      // Accept: "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify({ email, password }),
   })
     .then(handleResponse)
+  // .then((res) => {
+  //   return handleResponse(res);
+  // })
+  // .then((data) => {
+  //   localStorage.setItem("token", data.token);
+  //   return data;
+  // });
 }
 
 export const authorize = (data) => {
@@ -31,7 +41,7 @@ export const getData = (token) => {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
+      "Authorization": `Bearer ${token}`,
     },
   }).then(handleResponse)
 };

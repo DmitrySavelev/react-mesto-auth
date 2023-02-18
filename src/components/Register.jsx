@@ -1,12 +1,13 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Register = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [userData, setUserData] = useState({
-    email: "",
-    password: "",
-  });
+  // const [userData, setUserData] = useState({
+  //   email: "",
+  //   password: "",
+  // });
 
   function handleChangeEmail(e) {
     setEmail(e.target.value);
@@ -18,25 +19,21 @@ const Register = (props) => {
 
   function handleSubmit(e) {
     e.preventDefault();
-
-    if (userData.password === userData.confirmPassword) {
-      props.handleRegister(userData)
-        .then(() => {
-          setUserData({ email: "", password: "" });
-        })
-        .catch((error) => {
-          console.log(`Что-то пошло не так! ${error} `);
-        });
-    }
+    props
+      .handleRegister( email, password )
+      .then(() => {
+        setEmail("");
+        setPassword("");
+        // setUserData({ email: "", password: "" });
+      })
+      .catch((error) => {
+        console.log(`Что-то пошло не так! ${error} `);
+      });
   }
 
   return (
     <div className="auth">
-      <form
-        onSubmit={handleSubmit}
-        name="authForm"
-        className={`auth__form`}
-      >
+      <form onSubmit={handleSubmit} name="authForm" className={`auth__form`}>
         <h2 className="auth__title">{props.title}</h2>
         <label className="popup__form-field">
           <input
@@ -66,14 +63,14 @@ const Register = (props) => {
           />
           <span className="popup__error job-input-error"></span>
         </label>
-        <button type="submit" className="auth__button">
+        <button type="submit" className="auth__button" onSubmit={handleSubmit}>
           {props.submitValue}
         </button>
         <span className="auth__subtitle">
           Уже зарегистрированы?{" "}
-          <a className="auth__link" href="#">
+          <Link to="/signin" className="auth__link">
             Войти
-          </a>
+          </Link>
         </span>
       </form>
     </div>

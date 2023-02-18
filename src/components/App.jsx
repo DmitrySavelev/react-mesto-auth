@@ -47,6 +47,19 @@ function App() {
     setSelectedCard(card);
   }
 
+  // fetch("https://auth.nomoreparties.co", {
+  //   method: "POST",
+  //   body: JSON.stringify({
+  //     email: "stasbasov@yandex.ru",
+  //     password: "StasBasov1989",
+  //   }),
+  // })
+  //   .then((res) => res.json())
+  //   .then((data) => {
+  //     // сохраняем токен
+  //     localStorage.setItem("token", data.token);
+  //   });
+
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
   }
@@ -143,12 +156,12 @@ function App() {
 
   function handleLogin({ email, password }) {
     return authorize(email, password).then((data) => {
+      console.log(email);
       if (data.jwt) {
         localStorage.setItem("jwt", data.jwt);
         console.log(data);
         setEmail(data.email);
         setLoggedIn(true);
-        console.log(data);
         setUserData({
           email: data.user.email,
           password: data.user.password,
@@ -158,9 +171,26 @@ function App() {
     });
   }
 
-  function handleRegister({ email, password }) {
+  // authorize('email', 'password').then((data) => {
+  //   console.log(data)
+  //   if (data.jwt) {
+  //     localStorage.setItem("jwt", data.jwt);
+  //     console.log(data);
+  //     setEmail(data.email);
+  //     setLoggedIn(true);
+  //     console.log(data);
+  //     setUserData({
+  //       email: data.user.email,
+  //       password: data.user.password,
+  //     });
+  //     navigate("/main");
+  //   }
+  // });
+
+  function handleRegister({email, password}) {
     return register(email, password).then(() => {
-      navigate("/login");
+      console.log(email);
+      navigate("/signin");
     });
   }
 
@@ -187,16 +217,20 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-        <Header email={email}  onSignOut={handleSignOut} />
+        <Header email={email} onSignOut={handleSignOut} />
         <Routes>
           <Route
             path="/"
             element={
-              loggedIn ? <Navigate to="/main" /> : <Navigate to="/sign-in" />
+              loggedIn ? (
+                <Navigate to="/main" replace />
+              ) : (
+                <Navigate to="/signin" replace />
+              )
             }
           />
           <Route
-            path="/sign-in"
+            path="/signin"
             element={
               <Login
                 title="Вход"
@@ -207,7 +241,7 @@ function App() {
             }
           />
           <Route
-            path="/sign-up"
+            path="/signup"
             element={
               <Register
                 title="Регистрация"
@@ -277,10 +311,10 @@ function App() {
         <nav>
           <ul>
             <li>
-              <Link to="/sign-in">sign-in</Link>
+              <Link to="/signin">sign-in</Link>
             </li>
             <li>
-              <Link to="/sign-up">sign-up</Link>
+              <Link to="/signup">sign-up</Link>
             </li>
             <li>
               <Link to="/main">main</Link>
