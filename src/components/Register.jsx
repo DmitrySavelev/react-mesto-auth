@@ -1,25 +1,26 @@
 import { useState } from "react";
 
-const Register = ({ handleRegister }, props) => {
+const Register = (props) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [userData, setUserData] = useState({
     email: "",
     password: "",
   });
 
-  function handleChange(e) {
-    const { name, value } = e.target;
+  function handleChangeEmail(e) {
+    setEmail(e.target.value);
+  }
 
-    setUserData({
-      ...userData,
-      [name]: value,
-    });
+  function handleChangePassword(e) {
+    setPassword(e.target.value);
   }
 
   function handleSubmit(e) {
     e.preventDefault();
 
     if (userData.password === userData.confirmPassword) {
-      handleRegister(userData)
+      props.handleRegister(userData)
         .then(() => {
           setUserData({ email: "", password: "" });
         })
@@ -32,7 +33,7 @@ const Register = ({ handleRegister }, props) => {
   return (
     <div className="auth">
       <form
-        // onSubmit={onSubmit}
+        onSubmit={handleSubmit}
         name="authForm"
         className={`auth__form`}
       >
@@ -40,8 +41,8 @@ const Register = ({ handleRegister }, props) => {
         <label className="popup__form-field">
           <input
             name="inputEmail"
-            // value={props.name}
-            onChange={handleChange}
+            value={email}
+            onChange={handleChangeEmail}
             type="email"
             id="email-input"
             className="auth__input auth__input_email"
@@ -54,8 +55,8 @@ const Register = ({ handleRegister }, props) => {
         <label className="popup__form-field">
           <input
             name="inputJob"
-            // value={description}
-            onChange={handleChange}
+            value={password}
+            onChange={handleChangePassword}
             type="password"
             id="password-input"
             className="auth__input auth__input_password"

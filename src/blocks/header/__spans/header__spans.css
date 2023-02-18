@@ -1,0 +1,5 @@
+.header__spans {
+  display: flex;
+  padding-top: 51px;
+  gap: 24px;
+}

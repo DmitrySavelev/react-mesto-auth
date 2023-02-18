@@ -1,7 +1,9 @@
 .header {
   width: 880px;
   margin: 0 auto;
-  border-bottom: 1px solid #3B3B3B;
+  border-bottom: 1px solid #3b3b3b;
+  display: flex;
+  justify-content: space-between;
 }
 
 @media (max-width: 1279px) {

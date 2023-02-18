@@ -26,6 +26,7 @@ function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const [currentUser, setCurrentUser] = useState({ name: "", about: "" });
+  const [email, setEmail] = useState("");
 
   useEffect(() => {
     api
@@ -144,12 +145,14 @@ function App() {
     return authorize(email, password).then((data) => {
       if (data.jwt) {
         localStorage.setItem("jwt", data.jwt);
+        console.log(data);
+        setEmail(data.email);
         setLoggedIn(true);
         console.log(data);
-        // setUserData({
-        //   email: data.user.email,
-        //   password: data.user.password,
-        // });
+        setUserData({
+          email: data.user.email,
+          password: data.user.password,
+        });
         navigate("/main");
       }
     });
@@ -170,15 +173,21 @@ function App() {
           email: res.email,
           password: res.password,
         });
+        setEmail(res.email);
         navigate("/main");
       });
     }
   }
 
+  function handleSignOut() {
+    localStorage.removeItem("token");
+    setLoggedIn(false);
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-        <Header />
+        <Header email={email}  onSignOut={handleSignOut} />
         <Routes>
           <Route
             path="/"
@@ -204,6 +213,7 @@ function App() {
                 title="Регистрация"
                 name="register"
                 submitValue="Зарегистрироваться"
+                handleRegister={handleRegister}
               />
             }
           />
@@ -212,6 +222,7 @@ function App() {
             element={
               <ProtectedRoute
                 component={Main}
+                userData={userData}
                 onEditProfile={handleEditProfileClick}
                 onAddPlace={handleAddPlaceClick}
                 onSuccess={handleSuccessClick}

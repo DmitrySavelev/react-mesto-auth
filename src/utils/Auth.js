@@ -13,10 +13,6 @@ export const register = (data) => {
     body: JSON.stringify(data),
   })
     .then(handleResponse)
-    .then((data) => {
-      localStorage.setItem("token", data.token);//??????
-      return data;
-    });
 }
 
 export const authorize = (data) => {
@@ -28,10 +24,6 @@ export const authorize = (data) => {
     body: JSON.stringify(data),
   })
     .then(handleResponse)
-    .then((data) => {
-      localStorage.setItem("token", data.token);//??????
-      return data;
-    });
 }
 
 export const getData = (token) => {

@@ -1,17 +1,19 @@
 import { useState } from "react";
 
-const Login = ({ handleLogin }, props) => {
+const Login = (props) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [userData, setUserData] = useState({
     email: "",
     password: "",
   });
 
-  function handleChange(e) {
-    const { name, value } = e.target;
-    setUserData({
-      ...userData,
-      [name]: value,
-    });
+  function handleChangeEmail(e) {
+    setEmail(e.target.value);
+  }
+  
+  function handleChangePassword(e) {
+    setPassword(e.target.value);
   }
 
   function handleSubmit(e) {
@@ -21,7 +23,8 @@ const Login = ({ handleLogin }, props) => {
       return;
     }
 
-    handleLogin(userData)
+    props
+      .handleLogin(userData)
       .then(() => {
         setUserData({ email: "", password: "" });
       })
@@ -36,9 +39,9 @@ const Login = ({ handleLogin }, props) => {
         <h2 className="auth__title">{props.title}</h2>
         <label className="popup__form-field">
           <input
-            name="inputEmail"
-            value={userData.password || ""}
-            onChange={handleChange}
+            name="email"
+            value={email || ""}
+            onChange={handleChangeEmail}
             type="email"
             id="email-input"
             className="auth__input auth__input_email"
@@ -50,9 +53,9 @@ const Login = ({ handleLogin }, props) => {
         </label>
         <label className="popup__form-field">
           <input
-            name="inputJob"
-            value={userData.password || ""}
-            onChange={handleChange}
+            name="password"
+            value={password || ""}
+            onChange={handleChangePassword}
             type="password"
             id="password-input"
             className="auth__input auth__input_password"
