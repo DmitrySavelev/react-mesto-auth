@@ -2,29 +2,25 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const Register = (props) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  // const [userData, setUserData] = useState({
-  //   email: "",
-  //   password: "",
-  // });
+  const [userData, setUserData] = useState({
+    email: "",
+    password: "",
+  });
 
-  function handleChangeEmail(e) {
-    setEmail(e.target.value);
-  }
-
-  function handleChangePassword(e) {
-    setPassword(e.target.value);
-  }
+  const handleChange = (evt) => {
+    const { name, value } = evt.target;
+    setUserData({
+      ...userData,
+      [name]: value,
+    });
+  };
 
   function handleSubmit(e) {
     e.preventDefault();
     props
-      .handleRegister( email, password )
+      .handleRegister({userData})
       .then(() => {
-        setEmail("");
-        setPassword("");
-        // setUserData({ email: "", password: "" });
+        setUserData({ email: "", password: "" });
       })
       .catch((error) => {
         console.log(`Что-то пошло не так! ${error} `);
@@ -37,9 +33,9 @@ const Register = (props) => {
         <h2 className="auth__title">{props.title}</h2>
         <label className="popup__form-field">
           <input
-            name="inputEmail"
-            value={email}
-            onChange={handleChangeEmail}
+            name="email"
+            value={userData.email || ""}
+            onChange={handleChange}
             type="email"
             id="email-input"
             className="auth__input auth__input_email"
@@ -51,9 +47,9 @@ const Register = (props) => {
         </label>
         <label className="popup__form-field">
           <input
-            name="inputJob"
-            value={password}
-            onChange={handleChangePassword}
+            name="password"
+            value={userData.password || ""}
+            onChange={handleChange}
             type="password"
             id="password-input"
             className="auth__input auth__input_password"

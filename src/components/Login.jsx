@@ -1,28 +1,21 @@
 import { useState } from "react";
 
 const Login = (props) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [userData, setUserData] = useState({
     email: "",
     password: "",
   });
 
-  function handleChangeEmail(e) {
-    setEmail(e.target.value);
-  }
-  
-  function handleChangePassword(e) {
-    setPassword(e.target.value);
-  }
+  const handleChange = (evt) => {
+    const { name, value } = evt.target;
+    setUserData({
+      ...userData,
+      [name]: value,
+    });
+  };
 
   function handleSubmit(e) {
     e.preventDefault();
-
-    if (!userData.username || !userData.password) {
-      return;
-    }
-
     props
       .handleLogin(userData)
       .then(() => {
@@ -40,8 +33,8 @@ const Login = (props) => {
         <label className="popup__form-field">
           <input
             name="email"
-            value={email || ""}
-            onChange={handleChangeEmail}
+            value={userData.email || ""}
+            onChange={handleChange}
             type="email"
             id="email-input"
             className="auth__input auth__input_email"
@@ -54,8 +47,8 @@ const Login = (props) => {
         <label className="popup__form-field">
           <input
             name="password"
-            value={password || ""}
-            onChange={handleChangePassword}
+            value={userData.password || ""}
+            onChange={handleChange}
             type="password"
             id="password-input"
             className="auth__input auth__input_password"
@@ -65,7 +58,7 @@ const Login = (props) => {
           />
           <span className="popup__error job-input-error"></span>
         </label>
-        <button type="submit" className="auth__button">
+        <button type="submit" className="auth__button" onSubmit={handleSubmit}>
           {props.submitValue}
         </button>
       </form>

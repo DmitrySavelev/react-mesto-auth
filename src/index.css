@@ -93,3 +93,11 @@
 @import url(./blocks/auth/__button/auth__button.css);
 @import url(./blocks/auth/__subtitle/auth__subtitle.css);
 @import url(./blocks/auth/__link/auth__link.css);
+
+
+
+
+@import url(./blocks/popup/_info-tooltip/popup_info-tooltip.css);
+@import url(./blocks/popup/__container/popup__container.css);
+@import url(./blocks/popup/__title-tooltip/popup__title-tooltip.css);
+@import url(./blocks/popup/__success/popup__success.css);

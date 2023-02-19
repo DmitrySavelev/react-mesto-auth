@@ -1,4 +1,4 @@
-const Header = () => {
+const Header = (props) => {
   return (
     <header className="header">
       <img
@@ -7,7 +7,7 @@ const Header = () => {
         className="header__logo"
       />
       <div className="header__spans">
-        <span className="header__email">Dsavelev1703@yandex.ru</span>
+        <span className="header__email">{props.email}</span>
         <span className="header__switcher">Войти</span>
       </div>
     </header>

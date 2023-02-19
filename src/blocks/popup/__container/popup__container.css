@@ -1,6 +1,6 @@
-.popup__container-success {
+.popup__container {
   position: relative;
-  box-sizing: border-box; 
+  box-sizing: border-box;
   width: 100%;
   max-width: 430px;
   min-height: 272px;
@@ -14,7 +14,7 @@
 }
 
 @media (max-width: 1279px) {
-  .popup__container-success {
+  .popup__container {
     width: 282px;
     height: 272px;
     padding: 25px 22px;
