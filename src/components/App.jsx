@@ -11,7 +11,6 @@ import { api } from "../utils/Api";
 import { register, authorize, getData } from "../utils/Auth";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import {
-  Link,
   Navigate,
   Route,
   Routes,
@@ -38,7 +37,6 @@ function App() {
     email: "",
     password: "",
   });
-
   const location = useLocation();
 
   useEffect(() => {

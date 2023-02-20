@@ -15,9 +15,8 @@ const Register = (props) => {
     });
   };
 
-
   function handleSubmit(e) {
-    console.log(userData)
+    console.log(userData);
     e.preventDefault();
     props
       .handleRegister(userData)
