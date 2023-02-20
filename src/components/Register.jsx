@@ -15,10 +15,12 @@ const Register = (props) => {
     });
   };
 
+
   function handleSubmit(e) {
+    console.log(userData)
     e.preventDefault();
     props
-      .handleRegister({userData})
+      .handleRegister(userData)
       .then(() => {
         setUserData({ email: "", password: "" });
       })

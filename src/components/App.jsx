@@ -10,7 +10,14 @@ import PopupWithForm from "./PopupWithForm";
 import { api } from "../utils/Api";
 import { register, authorize, getData } from "../utils/Auth";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
-import { Link, Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import {
+  Link,
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import Login from "./Login";
 import Register from "./Register";
 import ProtectedRoute from "./ProtectedRoute";
@@ -23,9 +30,17 @@ function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const [currentUser, setCurrentUser] = useState({ name: "", about: "" });
-  const [email, setEmail] = useState("");
   const [requestStatus, setRequestStatus] = useState(false);
   const [isOpenInfoTooltip, setIsOpenInfoTooltip] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const navigate = useNavigate();
+  const [userData, setUserData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const location = useLocation();
+
   useEffect(() => {
     api
       .getInitialCards()
@@ -120,22 +135,12 @@ function App() {
     setIsOpenInfoTooltip(false);
   }
 
-  const [loggedIn, setLoggedIn] = useState(false);
-  const navigate = useNavigate();
-
-  const [userData, setUserData] = useState({
-    email: "",
-    password: "",
-  });
-
   useEffect(() => {
     CheckToken();
   }, []);
 
   function handleLogin({ email, password }) {
     return authorize(email, password).then((data) => {
-      console.log(data);
-
       if (data.token) {
         localStorage.setItem("token", data.token);
         setLoggedIn(true);
@@ -143,53 +148,44 @@ function App() {
           email: email,
           password: password,
         });
-        navigate("/main");
+        navigate("/");
       }
     });
   }
 
   function CheckToken() {
-    const jwt = localStorage.getItem("jwt");
+    const jwt = localStorage.getItem("token");
     if (jwt) {
       getData(jwt).then((res) => {
         setLoggedIn(true);
         setUserData({
-          email: res.email,
-          password: res.password,
+          email: res.data.email,
         });
-        setEmail(res.email);
-        navigate("/main");
+        navigate("/main", { replace: true });
       });
     }
   }
 
-  function handleSignOut() {
-    localStorage.removeItem("token");
-    setLoggedIn(false);
-  }
-
   function handleRegister({ email, password }) {
-    register(email, password)
+    return register(email, password)
       .then((res) => {
         if (res) {
           setRequestStatus(true);
-          console.log(isOpenInfoTooltip);
           setIsOpenInfoTooltip(true);
-          navigate("/signin");
-          console.log(isOpenInfoTooltip);
+          navigate("/signin", { replace: true });
         }
       })
       .catch((err) => {
         console.log(`${err}`);
         setRequestStatus(false);
-        setIsOpenInfoTooltip(false);
+        setIsOpenInfoTooltip(true);
       });
   }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-        <Header email={email} onSignOut={handleSignOut} />
+        <Header userData={userData} location={location} />
         <Routes>
           <Route
             path="/"
@@ -227,7 +223,7 @@ function App() {
             path="/main"
             element={
               <ProtectedRoute
-                component={Main}
+                element={Main}
                 userData={userData}
                 onEditProfile={handleEditProfileClick}
                 onAddPlace={handleAddPlaceClick}
@@ -237,23 +233,11 @@ function App() {
                 onCardLike={handleCardLike}
                 cards={cards}
                 setCards={setCards}
+                loggedIn={loggedIn}
               />
             }
           />
         </Routes>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/signin">sign-in</Link>
-            </li>
-            <li>
-              <Link to="/signup">sign-up</Link>
-            </li>
-            <li>
-              <Link to="/main">main</Link>
-            </li>
-          </ul>
-        </nav>
         <Footer />
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
         <EditAvatarPopup
@@ -282,20 +266,6 @@ function App() {
           onClose={closeAllPopups}
           isRequestStatus={requestStatus}
         />
-
-        {/* <SuccessPopup
-          title="Вы успешно зарегистрировались!"
-          name="success"
-          isOpen={isSuccessPopupOpen}
-          onClose={closeAllPopups}
-        />
-        <FailPopup
-          title="Что-то пошло не так!
-          Попробуйте ещё раз."
-          name="fail"
-          isOpen={isFailPopupOpen}
-          onClose={closeAllPopups}
-        /> */}
         <PopupWithForm title="Вы уверены?" name="delete" buttonName="Да" />
       </div>
     </CurrentUserContext.Provider>

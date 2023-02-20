@@ -3,3 +3,9 @@
   width: 120px;
   background-image: url(../../../images/success.png);
 }
+
+@media (max-width: 1279px) {
+  .popup__success {
+    margin: 50px auto 40px;
+  }
+}

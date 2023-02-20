@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Header = (props) => {
   return (
     <header className="header">
@@ -7,8 +9,24 @@ const Header = (props) => {
         className="header__logo"
       />
       <div className="header__spans">
-        <span className="header__email">{props.email}</span>
-        <span className="header__switcher">Войти</span>
+        <span className="header__email">
+          {props.location.pathname === "/signin" ? (
+            <Link to="/signup" className="header__switcher">
+              Регистрация
+            </Link>
+          ) : props.location.pathname === "/signup" ? (
+            <Link to="/signin" className="header__switcher">
+              Войти
+            </Link>
+          ) : (
+            <div>
+              <span className="header__email">{props.userData.email}</span>
+              <Link to="/signin" className="header__switcher">
+                Выйти
+              </Link>
+            </div>
+          )}
+        </span>
       </div>
     </header>
   );
