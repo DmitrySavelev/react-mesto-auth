@@ -4,7 +4,7 @@ import PopupWithForm from "./PopupWithForm";
 const AddPlacePopup = (props) => {
   const [name, setName] = useState("");
   const [link, setLink] = useState("");
- 
+
   function handleChangeName(e) {
     setName(e.target.value);
   }

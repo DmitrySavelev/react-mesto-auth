@@ -29,7 +29,7 @@ function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const [currentUser, setCurrentUser] = useState({ name: "", about: "" });
-  const [requestStatus, setRequestStatus] = useState(false);
+  const [isSuccessTooltipStatus, setIsSuccessTooltipStatus] = useState(false);
   const [isOpenInfoTooltip, setIsOpenInfoTooltip] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
@@ -40,19 +40,21 @@ function App() {
   const location = useLocation();
 
   useEffect(() => {
-    api
-      .getInitialCards()
-      .then((data) => {
-        setCards(data);
-      })
-      .catch((error) => console.log(error));
-    api
-      .getUserData()
-      .then((data) => {
-        setCurrentUser(data);
-      })
-      .catch((error) => console.log(error));
-  }, []);
+    if (loggedIn) {
+      api
+        .getInitialCards()
+        .then((data) => {
+          setCards(data);
+        })
+        .catch((error) => console.log(error));
+      api
+        .getUserData()
+        .then((data) => {
+          setCurrentUser(data);
+        })
+        .catch((error) => console.log(error));
+    }
+  }, [loggedIn]);
 
   function handleCardClick(card) {
     setSelectedCard(card);
@@ -89,15 +91,15 @@ function App() {
       .then(() => {
         setCards((state) =>
           state.filter((c) => {
-            return c !== card;
+            return c._id !== card._id;
           })
         );
       })
       .catch((error) => console.log(error));
   }
-  function handleUpdateUser(card) {
+  function handleUpdateUser(userData) {
     api
-      .editProfile(card)
+      .editProfile(userData)
       .then((data) => {
         setCurrentUser(data);
         closeAllPopups();
@@ -115,9 +117,9 @@ function App() {
       .catch((error) => console.log(error));
   }
 
-  function handleUpdateAvatar(card) {
+  function handleUpdateAvatar(userData) {
     api
-      .updateAvatar(card.avatar)
+      .updateAvatar(userData.avatar)
       .then((data) => {
         setCurrentUser(data);
         closeAllPopups();
@@ -134,33 +136,37 @@ function App() {
   }
 
   useEffect(() => {
-    CheckToken();
+    checkToken();
   }, []);
 
   function handleLogin({ email, password }) {
-    return authorize(email, password).then((data) => {
-      if (data.token) {
-        localStorage.setItem("token", data.token);
-        setLoggedIn(true);
-        setUserData({
-          email: email,
-          password: password,
-        });
-        navigate("/");
-      }
-    });
+    return authorize(email, password)
+      .then((data) => {
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+          setLoggedIn(true);
+          setUserData({
+            email: email,
+            password: password,
+          });
+          navigate("/");
+        }
+      })
+      .catch((error) => console.log(error));
   }
 
-  function CheckToken() {
+  function checkToken() {
     const jwt = localStorage.getItem("token");
     if (jwt) {
-      getData(jwt).then((res) => {
-        setLoggedIn(true);
-        setUserData({
-          email: res.data.email,
-        });
-        navigate("/main", { replace: true });
-      });
+      getData(jwt)
+        .then((res) => {
+          setLoggedIn(true);
+          setUserData({
+            email: res.data.email,
+          });
+          navigate("/main", { replace: true });
+        })
+        .catch((error) => console.log(error));
     }
   }
 
@@ -168,16 +174,15 @@ function App() {
     return register(email, password)
       .then((res) => {
         if (res) {
-          setRequestStatus(true);
-          setIsOpenInfoTooltip(true);
+          setIsSuccessTooltipStatus(true);
           navigate("/signin", { replace: true });
         }
       })
       .catch((err) => {
         console.log(`${err}`);
-        setRequestStatus(false);
-        setIsOpenInfoTooltip(true);
-      });
+        setIsSuccessTooltipStatus(false);
+      })
+      .finally(() => setIsOpenInfoTooltip(true));
   }
 
   return (
@@ -200,7 +205,6 @@ function App() {
             element={
               <Login
                 title="Вход"
-                name="login"
                 submitValue="Войти"
                 handleLogin={handleLogin}
               />
@@ -211,7 +215,6 @@ function App() {
             element={
               <Register
                 title="Регистрация"
-                name="register"
                 submitValue="Зарегистрироваться"
                 handleRegister={handleRegister}
               />
@@ -222,7 +225,6 @@ function App() {
             element={
               <ProtectedRoute
                 element={Main}
-                userData={userData}
                 onEditProfile={handleEditProfileClick}
                 onAddPlace={handleAddPlaceClick}
                 onEditAvatar={handleEditAvatarClick}
@@ -230,7 +232,6 @@ function App() {
                 onCardClick={handleCardClick}
                 onCardLike={handleCardLike}
                 cards={cards}
-                setCards={setCards}
                 loggedIn={loggedIn}
               />
             }
@@ -246,7 +247,7 @@ function App() {
           onUpdateAvatar={handleUpdateAvatar}
         />
         <EditProfilePopup
-          title="редактировать профиль"
+          title="Редактировать профиль"
           name="edit"
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
@@ -262,7 +263,7 @@ function App() {
         <InfoTooltip
           isOpen={isOpenInfoTooltip}
           onClose={closeAllPopups}
-          isRequestStatus={requestStatus}
+          isRequestStatus={isSuccessTooltipStatus}
         />
         <PopupWithForm title="Вы уверены?" name="delete" buttonName="Да" />
       </div>

@@ -2,26 +2,26 @@ import { useEffect } from "react";
 import { useRef } from "react";
 import PopupWithForm from "./PopupWithForm";
 
-const EditAvatarPopup = (props) => {
+const EditAvatarPopup = ({ title, name, isOpen, onClose, onUpdateAvatar }) => {
   const avatarRef = useRef();
 
   function handleSubmit(e) {
     e.preventDefault();
-    props.onUpdateAvatar({
+    onUpdateAvatar({
       avatar: avatarRef.current.value,
     });
   }
 
   useEffect(() => {
     avatarRef.current.value = "";
-  }, [props.isOpen]);
+  }, [isOpen]);
 
   return (
     <PopupWithForm
-      title={props.title}
-      name={props.name}
-      isOpen={props.isOpen}
-      onClose={props.onClose}
+      title={title}
+      name={name}
+      isOpen={isOpen}
+      onClose={onClose}
       onSubmit={handleSubmit}
     >
       <label className="popup__form-field">

@@ -2,14 +2,22 @@ import { useContext } from "react";
 import Card from "./Card";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
-const Main = (props) => {
+const Main = ({
+  onEditProfile,
+  onAddPlace,
+  onEditAvatar,
+  onCardDelete,
+  onCardClick,
+  onCardLike,
+  cards,
+}) => {
   const CurrentUser = useContext(CurrentUserContext);
 
   return (
     <main className="content">
       <section className="profile">
         <div className="profile__wrapper">
-          <div className="profile__avatar" onClick={props.onEditAvatar}>
+          <div className="profile__avatar" onClick={  onEditAvatar}>
             <div
               style={{ backgroundImage: `url(${CurrentUser.avatar})` }}
               alt="аватар."
@@ -23,7 +31,7 @@ const Main = (props) => {
                 type="button"
                 aria-label="редактировать"
                 className="profile__edit-button"
-                onClick={props.onEditProfile}
+                onClick={ onEditProfile}
               ></button>
             </div>
             <p className="profile__job">{CurrentUser.about}</p>
@@ -33,19 +41,18 @@ const Main = (props) => {
           type="button"
           aria-label="добавить новую карточку"
           className="profile__add-button"
-          onClick={props.onAddPlace}
+          onClick={ onAddPlace}
         ></button>
       </section>
       <section className="elements">
         <ul className="elements__card">
-          {props.cards.map((card) => (
+          { cards.map((card) => (
             <Card
               key={card._id}
               card={card}
-              onCardClick={props.onCardClick}
-              onDeleteCard={props.onDeleteCard}
-              onCardLike={props.onCardLike}
-              onCardDelete={props.onCardDelete}
+              onCardClick={ onCardClick}
+              onCardLike={  onCardLike}
+              onCardDelete={  onCardDelete}
             />
           ))}
         </ul>

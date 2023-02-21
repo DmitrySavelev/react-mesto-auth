@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Login = (props) => {
+const Login = ({ title, submitValue, handleLogin }) => {
   const [userData, setUserData] = useState({
     email: "",
     password: "",
@@ -16,8 +16,7 @@ const Login = (props) => {
 
   function handleSubmit(e) {
     e.preventDefault();
-    props
-      .handleLogin(userData)
+    handleLogin(userData)
       .then(() => {
         setUserData({ email: "", password: "" });
       })
@@ -29,7 +28,7 @@ const Login = (props) => {
   return (
     <div className="auth">
       <form onSubmit={handleSubmit} name="authForm" className={`auth__form`}>
-        <h2 className="auth__title">{props.title}</h2>
+        <h2 className="auth__title">{title}</h2>
         <label className="popup__form-field">
           <input
             name="email"
@@ -59,7 +58,7 @@ const Login = (props) => {
           <span className="popup__error job-input-error"></span>
         </label>
         <button type="submit" className="auth__button" onSubmit={handleSubmit}>
-          {props.submitValue}
+          {submitValue}
         </button>
       </form>
     </div>

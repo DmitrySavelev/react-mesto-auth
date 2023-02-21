@@ -2,13 +2,13 @@ import { useContext, useEffect, useState } from "react";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import PopupWithForm from "./PopupWithForm";
 
-const EditProfilePopup = (props) => {
+const EditProfilePopup = ({ title, name, isOpen, onClose, onUpdateUser }) => {
   const currentUser = useContext(CurrentUserContext);
-  const [name, setName] = useState("");
+  const [nameUser, setNameUser] = useState("");
   const [description, setDescription] = useState("");
 
   const handleNameChange = (e) => {
-    setName(e.target.value);
+    setNameUser(e.target.value);
   };
   const handleDescriptionChange = (e) => {
     setDescription(e.target.value);
@@ -17,29 +17,29 @@ const EditProfilePopup = (props) => {
   function handleSubmit(e) {
     e.preventDefault();
     // Передаём значения управляемых компонентов во внешний обработчик
-    props.onUpdateUser({
-      name: name,
+    onUpdateUser({
+      name: nameUser,
       about: description,
     });
   }
 
   useEffect(() => {
-    setName(currentUser.name);
+    setNameUser(currentUser.name);
     setDescription(currentUser.about);
-  }, [currentUser, props.isOpen]);
+  }, [currentUser, isOpen]);
 
   return (
     <PopupWithForm
-      title={props.title}
-      name={props.name}
-      isOpen={props.isOpen}
-      onClose={props.onClose}
+      title={title}
+      name={name}
+      isOpen={isOpen}
+      onClose={onClose}
       onSubmit={handleSubmit}
     >
       <label className="popup__form-field">
         <input
           name="inputName"
-          value={name}
+          value={nameUser}
           onChange={handleNameChange}
           type="text"
           id="name-input"

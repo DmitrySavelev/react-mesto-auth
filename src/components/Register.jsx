@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-const Register = (props) => {
+const Register = ({ title, submitValue, handleRegister }) => {
   const [userData, setUserData] = useState({
     email: "",
     password: "",
@@ -16,10 +16,8 @@ const Register = (props) => {
   };
 
   function handleSubmit(e) {
-    console.log(userData);
     e.preventDefault();
-    props
-      .handleRegister(userData)
+    handleRegister(userData)
       .then(() => {
         setUserData({ email: "", password: "" });
       })
@@ -31,7 +29,7 @@ const Register = (props) => {
   return (
     <div className="auth">
       <form onSubmit={handleSubmit} name="authForm" className={`auth__form`}>
-        <h2 className="auth__title">{props.title}</h2>
+        <h2 className="auth__title">{title}</h2>
         <label className="popup__form-field">
           <input
             name="email"
@@ -61,7 +59,7 @@ const Register = (props) => {
           <span className="popup__error job-input-error"></span>
         </label>
         <button type="submit" className="auth__button" onSubmit={handleSubmit}>
-          {props.submitValue}
+          {submitValue}
         </button>
         <span className="auth__subtitle">
           Уже зарегистрированы?{" "}
