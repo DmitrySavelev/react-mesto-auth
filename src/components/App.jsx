@@ -43,24 +43,11 @@ function App() {
     if (loggedIn) {
       api
         .getInitialData()
-        .then((data) => {
-          setCards(data[1]);
-          setCurrentUser(data[0]);
+        .then(([userData, cards]) => {
+          setCurrentUser(userData);
+          setCards(cards);
         })
         .catch((error) => console.log(error));
-
-      // api
-      //   .getInitialCards()
-      //   .then((data) => {
-      //     setCards(data);
-      //   })
-      //   .catch((error) => console.log(error));
-      // api
-      //   .getUserData()
-      //   .then((data) => {
-      //     setCurrentUser(data);
-      //   })
-      //   .catch((error) => console.log(error));
     }
   }, [loggedIn]);
 
@@ -159,19 +146,17 @@ function App() {
   }, []);
 
   function handleLogin({ email, password }) {
-    return authorize(email, password)
-      .then((data) => {
-        if (data.token) {
-          localStorage.setItem("token", data.token);
-          setLoggedIn(true);
-          setUserData({
-            email: email,
-            password: password,
-          });
-          navigate("/");
-        }
-      })
-      .catch((error) => console.log(error));
+    return authorize(email, password).then((data) => {
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        setLoggedIn(true);
+        setUserData({
+          email: email,
+          password: password,
+        });
+        navigate("/");
+      }
+    });
   }
 
   function handleRegister({ email, password }) {
@@ -274,8 +259,11 @@ function App() {
           isOpen={isOpenInfoTooltip}
           onClose={closeAllPopups}
           isRequestStatus={isSuccessTooltipStatus}
-          success="Вы успешно зарегистрировались!"
-          fail="Что-то пошло не так!"
+          text={
+            isSuccessTooltipStatus
+              ? "Вы успешно зарегистрировались!"
+              : "Что-то пошло не так!"
+          }
         />
         <PopupWithForm title="Вы уверены?" name="delete" buttonName="Да" />
       </div>
