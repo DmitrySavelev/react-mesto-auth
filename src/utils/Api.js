@@ -13,7 +13,7 @@ class Api {
     throw new Error('ошибка');
   }
 
-  getData() {
+  getInitialData() {
     return Promise.all([this.getUserData(), this.getInitialCards()]);
   }
 

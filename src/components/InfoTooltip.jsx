@@ -1,4 +1,4 @@
-const InfoTooltip = ({ onClose, isOpen, isRequestStatus }) => {
+const InfoTooltip = ({ onClose, isOpen, isRequestStatus, success, fail }) => {
   return (
     <section
       className={`popup popup_info-tooltip ${isOpen ? "popup_opened" : ""}`}
@@ -14,9 +14,7 @@ const InfoTooltip = ({ onClose, isOpen, isRequestStatus }) => {
           className={isRequestStatus ? "popup__success" : "popup__fail"}
         ></div>
         <h2 className={`popup__title-tooltip`}>
-          {isRequestStatus
-            ? "Вы успешно зарегистрировались!"
-            : "Что-то пошло не так!"}
+          {isRequestStatus ? success : fail}
         </h2>
       </div>
     </section>

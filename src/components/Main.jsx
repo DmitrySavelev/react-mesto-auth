@@ -13,11 +13,22 @@ const Main = ({
 }) => {
   const CurrentUser = useContext(CurrentUserContext);
 
+  const cardsElements = cards.map((card) => (
+    <li className="elements__list" key={card._id}>
+      <Card
+        card={card}
+        onCardClick={onCardClick}
+        onCardLike={onCardLike}
+        onCardDelete={onCardDelete}
+      />
+    </li>
+  ));
+
   return (
     <main className="content">
       <section className="profile">
         <div className="profile__wrapper">
-          <div className="profile__avatar" onClick={  onEditAvatar}>
+          <div className="profile__avatar" onClick={onEditAvatar}>
             <div
               style={{ backgroundImage: `url(${CurrentUser.avatar})` }}
               alt="аватар."
@@ -31,7 +42,7 @@ const Main = ({
                 type="button"
                 aria-label="редактировать"
                 className="profile__edit-button"
-                onClick={ onEditProfile}
+                onClick={onEditProfile}
               ></button>
             </div>
             <p className="profile__job">{CurrentUser.about}</p>
@@ -41,21 +52,11 @@ const Main = ({
           type="button"
           aria-label="добавить новую карточку"
           className="profile__add-button"
-          onClick={ onAddPlace}
+          onClick={onAddPlace}
         ></button>
       </section>
       <section className="elements">
-        <ul className="elements__card">
-          { cards.map((card) => (
-            <Card
-              key={card._id}
-              card={card}
-              onCardClick={ onCardClick}
-              onCardLike={  onCardLike}
-              onCardDelete={  onCardDelete}
-            />
-          ))}
-        </ul>
+        <ul className="elements__card">{cardsElements}</ul>
       </section>
     </main>
   );

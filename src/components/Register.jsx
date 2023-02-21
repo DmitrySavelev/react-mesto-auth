@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-const Register = ({ title, submitValue, handleRegister }) => {
+const Register = ({
+  title,
+  submitValue,
+  handleRegister,
+  setIsSuccessTooltipStatus,
+}) => {
   const [userData, setUserData] = useState({
     email: "",
     password: "",
@@ -22,6 +27,7 @@ const Register = ({ title, submitValue, handleRegister }) => {
         setUserData({ email: "", password: "" });
       })
       .catch((error) => {
+        setIsSuccessTooltipStatus(false);
         console.log(`Что-то пошло не так! ${error} `);
       });
   }

@@ -1,4 +1,6 @@
 const ImagePopup = ({ card, onClose }) => {
+  const name = card ? card.name : "";
+
   return (
     <section className={`popup popup_zoom ${card ? "popup_opened" : ""}`}>
       <figure className="popup__figure">
@@ -9,12 +11,12 @@ const ImagePopup = ({ card, onClose }) => {
           onClick={onClose}
         ></button>
         <img
-          alt={card ? card.name : " "}
+          alt={name}
           className="popup__image"
           src={card ? card.link : " "}
         />
         <figcaption className="popup__caption">
-          {card ? card.name : " "}
+          {name}
         </figcaption>
       </figure>
     </section>

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const Header = ({userData, location}) => {
+const Header = ({ userData, location, onSignOut }) => {
   return (
     <header className="header">
       <img
@@ -21,7 +21,13 @@ const Header = ({userData, location}) => {
           ) : (
             <div>
               <span className="header__email">{userData.email}</span>
-              <Link to="/signin" className="header__switcher">
+              <Link
+                to="/signin"
+                className="header__switcher"
+                onClick={() => {
+                  onSignOut();
+                }}
+              >
                 Выйти
               </Link>
             </div>

@@ -8,7 +8,7 @@ import EditProfilePopup from "./EditProfilePopup";
 import AddPlacePopup from "./AddPlacePopup";
 import PopupWithForm from "./PopupWithForm";
 import { api } from "../utils/Api";
-import { register, authorize, getData } from "../utils/Auth";
+import { register, authorize, checkToken } from "../utils/Auth";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import {
   Navigate,
@@ -42,17 +42,25 @@ function App() {
   useEffect(() => {
     if (loggedIn) {
       api
-        .getInitialCards()
+        .getInitialData()
         .then((data) => {
-          setCards(data);
+          setCards(data[1]);
+          setCurrentUser(data[0]);
         })
         .catch((error) => console.log(error));
-      api
-        .getUserData()
-        .then((data) => {
-          setCurrentUser(data);
-        })
-        .catch((error) => console.log(error));
+
+      // api
+      //   .getInitialCards()
+      //   .then((data) => {
+      //     setCards(data);
+      //   })
+      //   .catch((error) => console.log(error));
+      // api
+      //   .getUserData()
+      //   .then((data) => {
+      //     setCurrentUser(data);
+      //   })
+      //   .catch((error) => console.log(error));
     }
   }, [loggedIn]);
 
@@ -136,7 +144,18 @@ function App() {
   }
 
   useEffect(() => {
-    checkToken();
+    const jwt = localStorage.getItem("token");
+    if (jwt) {
+      checkToken(jwt)
+        .then((res) => {
+          setLoggedIn(true);
+          setUserData({
+            email: res.data.email,
+          });
+          navigate("/main", { replace: true });
+        })
+        .catch((error) => console.log(error));
+    }
   }, []);
 
   function handleLogin({ email, password }) {
@@ -155,21 +174,6 @@ function App() {
       .catch((error) => console.log(error));
   }
 
-  function checkToken() {
-    const jwt = localStorage.getItem("token");
-    if (jwt) {
-      getData(jwt)
-        .then((res) => {
-          setLoggedIn(true);
-          setUserData({
-            email: res.data.email,
-          });
-          navigate("/main", { replace: true });
-        })
-        .catch((error) => console.log(error));
-    }
-  }
-
   function handleRegister({ email, password }) {
     return register(email, password)
       .then((res) => {
@@ -178,17 +182,22 @@ function App() {
           navigate("/signin", { replace: true });
         }
       })
-      .catch((err) => {
-        console.log(`${err}`);
-        setIsSuccessTooltipStatus(false);
-      })
       .finally(() => setIsOpenInfoTooltip(true));
+  }
+
+  function handleSignOut() {
+    setLoggedIn(false);
+    localStorage.removeItem("token");
   }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-        <Header userData={userData} location={location} />
+        <Header
+          userData={userData}
+          location={location}
+          onSignOut={handleSignOut}
+        />
         <Routes>
           <Route
             path="/"
@@ -217,6 +226,7 @@ function App() {
                 title="Регистрация"
                 submitValue="Зарегистрироваться"
                 handleRegister={handleRegister}
+                setIsSuccessTooltipStatus={setIsSuccessTooltipStatus}
               />
             }
           />
@@ -264,6 +274,8 @@ function App() {
           isOpen={isOpenInfoTooltip}
           onClose={closeAllPopups}
           isRequestStatus={isSuccessTooltipStatus}
+          success="Вы успешно зарегистрировались!"
+          fail="Что-то пошло не так!"
         />
         <PopupWithForm title="Вы уверены?" name="delete" buttonName="Да" />
       </div>
