@@ -2,7 +2,7 @@
 
 ---
 
-### [DEMO](https://github.com/DmitrySavelev/react-mesto-auth/)
+### [DEMO](https://dmitrysavelev.github.io/react-mesto-auth/)
 
 ---
 
